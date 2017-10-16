@@ -9,16 +9,20 @@ with open('./data2/driving_log.csv') as csvfile:
 	for line in reader:
 		lines.append(line)
 
+
+
 images = []
 measurements = []
+
 for line in lines:
-	source_path = line[0]
-	filename = source_path.split('/')[-1]
-	current_path = './data2/IMG/' + filename
-	image = cv2.imread(current_path)
-	images.append(image)
-	measurement = float(line[3])
-	measurements.append(measurement)
+	for i in range(3):
+		source_path = line[i]
+		filename = source_path.split('/')[-1]
+		current_path = './data2/IMG/' + filename
+		image = cv2.imread(current_path)
+		images.append(image)
+		measurement = float(line[3])
+		measurements.append(measurement)
 
 X_train = np.array(images)
 y_train = np.array(measurements)
