@@ -5,7 +5,8 @@ import numpy as np
 import sklearn
 
 from sklearn.model_selection import train_test_split
-from random import shuffle
+from sklearn.utils import shuffle
+#from random import shuffle
 
 samples = []
 with open('./data2/driving_log.csv') as csvfile:
@@ -16,15 +17,16 @@ with open('./data2/driving_log.csv') as csvfile:
 
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-batch_size = 32
+sample_size = 32
+#batch_size = 192
 
-def generator(samples, batch_size):
+def generator(samples, sample_size):
 	num_samples = len(samples)
 
 	while 1:
 		shuffle(samples)
-		for offset in range(0, num_samples, batch_size):
-			batch_samples = samples[offset:offset+batch_size]
+		for offset in range(0, num_samples, sample_size):
+			batch_samples = samples[offset:offset+sample_size]
 
 
 			images = []
@@ -51,10 +53,13 @@ def generator(samples, batch_size):
 
 			X_train = np.array(augmented_images)
 			y_train = np.array(augmented_angles)
+
+			X_train, y_train = shuffle(X_train, y_train)
+
 			yield sklearn.utils.shuffle(X_train, y_train)
 
-train_generator = generator(train_samples, batch_size)
-validation_generator = generator(validation_samples, batch_size)
+train_generator = generator(train_samples, sample_size)
+validation_generator = generator(validation_samples, sample_size)
 
 
 from keras.models import Sequential, Model
@@ -83,7 +88,7 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit_generator(train_generator, samples_per_epoch = len(train_samples), validation_data = validation_generator, nb_val_samples = len(validation_samples), nb_epoch=3)
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=3)
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
