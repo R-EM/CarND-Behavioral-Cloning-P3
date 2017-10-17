@@ -1,41 +1,61 @@
 import csv
-
+import os
 import cv2
 import numpy as np
+import sklearn
 
-lines = []
+from sklearn.model_selection import train_test_split
+from random import shuffle
+
+samples = []
 with open('./data2/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
-		lines.append(line)
+		samples.append(line)
 
 
+train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-images = []
-measurements = []
+batch_size = 32
 
-for line in lines:
-	for i in range(3):
-		source_path = line[i]
-		filename = source_path.split('/')[-1]
-		current_path = './data2/IMG/' + filename
-		image = cv2.imread(current_path)
-		images.append(image)
-		measurement = float(line[3])
-		measurements.append(measurement)
+def generator(samples, batch_size):
+	num_samples = len(samples)
 
-X_train = np.array(images)
-y_train = np.array(measurements)
+	while 1:
+		shuffle(samples)
+		for offset in range(0, num_samples, batch_size):
+			batch_samples = samples[offset:offset+batch_size]
 
-augmented_images, augmented_measurements = [], []
-for image, measurement in zip(images, measurements):
-	augmented_images.append(image)
-	augmented_measurements.append(measurement)
-	augmented_images.append(cv2.flip(image,1))
-	augmented_measurements.append(measurement*-1.0)
 
-X_train = np.array(augmented_images)
-y_train = np.array(augmented_measurements)
+			images = []
+			angles = []
+
+			for batch_sample in batch_samples:
+				for i in range(3):
+					name = './data2/IMG/' + batch_sample[i].split('/')[-1]
+					image = cv2.imread(name)
+					angle = float(batch_sample[3])
+					images.append(image)
+					angles.append(angle)
+
+			X_train = np.array(images)
+			y_train = np.array(angles)
+
+			augmented_images, augmented_angles = [], []
+			
+			for image, angle in zip(images, angles):
+				augmented_images.append(image)
+				augmented_angles.append(angle)
+				augmented_images.append(cv2.flip(image,1))
+				augmented_angles.append(angle*-1.0)
+
+			X_train = np.array(augmented_images)
+			y_train = np.array(augmented_angles)
+			yield sklearn.utils.shuffle(X_train, y_train)
+
+train_generator = generator(train_samples, batch_size)
+validation_generator = generator(validation_samples, batch_size)
+
 
 from keras.models import Sequential, Model
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout, Activation
@@ -63,6 +83,7 @@ model.add(Dense(10))
 model.add(Dense(1))
 
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples), validation_data = validation_generator, nb_val_samples = len(validation_samples), nb_epoch=3)
+#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
