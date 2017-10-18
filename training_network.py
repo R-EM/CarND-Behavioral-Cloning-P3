@@ -41,6 +41,10 @@ def generator(samples, sample_size):
 					name = './data_udacity/IMG/' + batch_sample[i].split('/')[-1]
 					image = cv2.imread(name)
 					angle = float(batch_sample[3])
+					if i == 1:
+						angle += 0.2
+					if i == 2:
+						angle -= 0.2
 					images.append(image)
 					angles.append(angle)
 
