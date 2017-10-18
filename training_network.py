@@ -102,7 +102,7 @@ model.add(Dense(1))
 model.add(Dropout(0.5))
 
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=4)
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=2)
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
