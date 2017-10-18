@@ -20,6 +20,10 @@ train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 sample_size = 32
 #batch_size = 192
 
+def resize_img(img):
+	from keras.backend import tf as ktf
+	return ktf.image.resize_images(img, (64,64))
+
 def generator(samples, sample_size):
 	num_samples = len(samples)
 
