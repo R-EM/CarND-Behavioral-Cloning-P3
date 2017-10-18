@@ -36,6 +36,7 @@ def generator(samples, sample_size):
 				for i in range(3):
 					name = './data3/IMG/' + batch_sample[i].split('/')[-1]
 					image = cv2.imread(name)
+					image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 					angle = float(batch_sample[3])
 					images.append(image)
 					angles.append(angle)
