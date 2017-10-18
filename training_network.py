@@ -76,7 +76,7 @@ model = Sequential()
 # Pre-processing of data
 model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160,320,3)))
 model.add(Cropping2D(cropping=((70,25), (0,0))))
-#model.add(Lambda(resize_img))
+model.add(Lambda(resize_img))
 
 model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "relu"))
 model.add(Dropout(0.5))
@@ -102,7 +102,7 @@ model.add(Dense(1))
 model.add(Dropout(0.5))
 
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=2)
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=10)
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
