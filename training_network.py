@@ -40,7 +40,6 @@ def generator(samples, sample_size):
 				for i in range(3):
 					name = './data_udacity/IMG/' + batch_sample[i].split('/')[-1]
 					image = cv2.imread(name)
-					image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 					angle = float(batch_sample[3])
 					images.append(image)
 					angles.append(angle)
@@ -102,7 +101,7 @@ model.add(Dense(1))
 model.add(Dropout(0.5))
 
 model.compile(loss = 'mse', optimizer = 'adam')
-model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=10)
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=4)
 #model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
