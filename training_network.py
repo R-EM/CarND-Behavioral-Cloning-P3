@@ -9,7 +9,7 @@ from sklearn.utils import shuffle
 #from random import shuffle
 
 samples = []
-with open('./data3/driving_log.csv') as csvfile:
+with open('./data_udacity/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		samples.append(line)
@@ -38,7 +38,7 @@ def generator(samples, sample_size):
 
 			for batch_sample in batch_samples:
 				for i in range(3):
-					name = './data3/IMG/' + batch_sample[i].split('/')[-1]
+					name = './data_udacity/IMG/' + batch_sample[i].split('/')[-1]
 					image = cv2.imread(name)
 					angle = float(batch_sample[3])
 					correction = 0.4
