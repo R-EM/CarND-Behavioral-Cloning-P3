@@ -41,7 +41,7 @@ def generator(samples, sample_size):
 					name = './data3/IMG/' + batch_sample[i].split('/')[-1]
 					image = cv2.imread(name)
 					angle = float(batch_sample[3])
-					correction = 0.2
+					correction = 0.4
 
 					if i == 1:
 						angle += correction
