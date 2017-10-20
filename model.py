@@ -84,16 +84,14 @@ from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout, Activation
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 
-
-def NVidia_model(model, train_gen, train_samp, validation_gen, validation_samp, epochs):
-	
-
-	# Pre-processing of data
+# Pre-processing of data
+def model_preprocessing(model):
 	model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160,320,3)))
 	model.add(Cropping2D(cropping=((70,25), (0,0))))
 	model.add(Lambda(resize_img))
+	return model
 
-	dropout_rate = 0.5
+def NVidia_model(model, dropout_rate):
 
 	model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "elu"))
 	#model.add(Dropout(dropout_rate))
@@ -120,27 +118,32 @@ def NVidia_model(model, train_gen, train_samp, validation_gen, validation_samp, 
 	#model.add(Dropout(dropout_rate))
 
 	model.compile(loss = 'mse', optimizer = 'adam')
-	model.fit_generator(train_gen, samples_per_epoch = len(train_samp*6), validation_data = validation_gen, nb_val_samples = len(validation_samp*6), nb_epoch=epochs)
 	return model
 	#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
-	
-model = Sequential()
 
-# Udacity training samples
+dropout_rate = 0.5	
+epochs = 1
+
+model = Sequential()
+model = model_preprocessing(model)
+model = NVidia_model(model, dropout_rate)
+
+
+# Load Udacity's training samples
 folder_name = './data_udacity/IMG/'
 train_samples, validation_samples = train_test_split(udacity_samples, test_size=0.2)
 train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
-model = NVidia_model(model, train_generator, train_samples, validation_generator, validation_samples, 1)
 
-# My training samples
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=epochs)
+
+# Load my training samples
 folder_name = './data3/IMG/'
 train_samples, validation_samples = train_test_split(my_samples, test_size=0.2)
 train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
-model =  NVidia_model(model, train_generator, train_samples, validation_generator, validation_samples, 1)
 
-
+model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=epochs)
 
 model.save('model.h5')
