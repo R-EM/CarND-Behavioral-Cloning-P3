@@ -19,7 +19,7 @@ for i in range(len(file_names)):
 			data_samples.append(line)
 
 sample_size = 32
-sample_multiplier = 2
+sample_multiplier = 6
 
 # Function to resize image
 def resize_img(img):
@@ -32,16 +32,16 @@ def data_augmentation(batch_samples, folder_name):
 	angles = []
 
 	for batch_sample in batch_samples:
-		for i in range(1):
+		for i in range(3):
 			name = folder_name + '/IMG/' + batch_sample[i].split('/')[-1]
 			image = cv2.imread(name)
 			angle = float(batch_sample[3])
-			#correction = 0.4
+			correction = 0.4
 
-			#if i == 1:
-			#	angle += correction
-			#if i == 2:
-			#	angle -= correction
+			if i == 1:
+				angle += correction
+			if i == 2:
+				angle -= correction
 			images.append(image)
 			angles.append(angle)
 
