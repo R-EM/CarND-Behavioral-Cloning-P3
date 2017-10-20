@@ -34,16 +34,16 @@ def data_augmentation(batch_samples, folder_name):
 	angles = []
 
 	for batch_sample in batch_samples:
-		for i in range(3):
+		for i in range(1):
 			name = folder_name + batch_sample[i].split('/')[-1]
 			image = cv2.imread(name)
 			angle = float(batch_sample[3])
-			correction = 0.4
+			#correction = 0.4
 
-			if i == 1:
-				angle += correction
-			if i == 2:
-				angle -= correction
+			#if i == 1:
+			#	angle += correction
+			#if i == 2:
+			#	angle -= correction
 			images.append(image)
 			angles.append(angle)
 
