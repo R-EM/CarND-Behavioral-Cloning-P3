@@ -24,6 +24,42 @@ def resize_img(img):
 	from keras.backend import tf as ktf
 	return ktf.image.resize_images(img, (64,64))
 
+def data_augmentation(batch_samples):
+	images = []
+	angles = []
+
+	for batch_sample in batch_samples:
+		for i in range(3):
+			name = './data_udacity/IMG/' + batch_sample[i].split('/')[-1]
+			image = cv2.imread(name)
+			angle = float(batch_sample[3])
+			correction = 0.4
+
+			if i == 1:
+				angle += correction
+			if i == 2:
+				angle -= correction
+			images.append(image)
+			angles.append(angle)
+
+	X_train = np.array(images)
+	y_train = np.array(angles)
+
+	augmented_images, augmented_angles = [], []
+	
+	for image, angle in zip(images, angles):
+		augmented_images.append(image)
+		augmented_angles.append(angle)
+		augmented_images.append(cv2.flip(image,1))
+		augmented_angles.append(angle*-1.0)
+
+	X_train = np.array(augmented_images)
+	y_train = np.array(augmented_angles)
+
+	X_train, y_train = shuffle(X_train, y_train)
+
+	return X_train, y_train
+
 def generator(samples, sample_size):
 	num_samples = len(samples)
 
@@ -32,39 +68,7 @@ def generator(samples, sample_size):
 		for offset in range(0, num_samples, sample_size):
 			batch_samples = samples[offset:offset+sample_size]
 
-
-			images = []
-			angles = []
-
-			for batch_sample in batch_samples:
-				for i in range(3):
-					name = './data_udacity/IMG/' + batch_sample[i].split('/')[-1]
-					image = cv2.imread(name)
-					angle = float(batch_sample[3])
-					correction = 0.4
-
-					if i == 1:
-						angle += correction
-					if i == 2:
-						angle -= correction
-					images.append(image)
-					angles.append(angle)
-
-			X_train = np.array(images)
-			y_train = np.array(angles)
-
-			augmented_images, augmented_angles = [], []
-			
-			for image, angle in zip(images, angles):
-				augmented_images.append(image)
-				augmented_angles.append(angle)
-				augmented_images.append(cv2.flip(image,1))
-				augmented_angles.append(angle*-1.0)
-
-			X_train = np.array(augmented_images)
-			y_train = np.array(augmented_angles)
-
-			X_train, y_train = shuffle(X_train, y_train)
+			X_train, y_train = data_augmentation(batch_samples)
 
 			yield sklearn.utils.shuffle(X_train, y_train)
 
