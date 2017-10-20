@@ -133,13 +133,13 @@ train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
 NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
 
-
 # My training samples
 folder_name = './data3/IMG/'
 train_samples, validation_samples = train_test_split(my_samples, test_size=0.2)
-train_generator = generator(train_samples, sample_size)
+train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
 NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
+
 
 
 model.save('model.h5')
