@@ -36,7 +36,7 @@ def data_augmentation(batch_samples, folder_name):
 			name = folder_name + '/IMG/' + batch_sample[i].split('/')[-1]
 			image = cv2.imread(name)
 			angle = float(batch_sample[3])
-			correction = 0.4
+			correction = 0.2
 
 			if i == 1:
 				angle += correction
