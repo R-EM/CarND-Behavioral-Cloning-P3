@@ -93,15 +93,15 @@ def model_preprocessing(model):
 
 def NVidia_model(model, dropout_rate):
 
-	model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "elu"))
+	model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "relu"))
 	#model.add(Dropout(dropout_rate))
-	model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "elu"))
+	model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "relu"))
 	#model.add(Dropout(dropout_rate))
-	model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "elu"))
+	model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "relu"))
 	#model.add(Dropout(dropout_rate))
-	model.add(Convolution2D(64,3,3, activation = "elu"))
+	model.add(Convolution2D(64,3,3, activation = "relu"))
 	#model.add(Dropout(dropout_rate))
-	model.add(Convolution2D(64,3,3, activation = "elu"))
+	model.add(Convolution2D(64,3,3, activation = "relu"))
 
 	model.add(Dropout(dropout_rate))
 
