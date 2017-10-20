@@ -8,16 +8,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 #from random import shuffle
 
-my_samples = []
-udacity_samples = []
-middle_driving_lap1_samples = []
-
-folder_names = ['data3', 'data_udacity', 'middle_driving_lap1']
+folder_name = './data_driving/'
+file_names = ['middle_driving_lap1', 'middle_driving_lap2', 'middle_driving_lap3']
 data_samples = []
 
-
-for i in range(len(folder_names)):
-	with open('./', folder_names[i], '/driving_log.csv') as csvfile:
+for i in range(len(file_names)):
+	with open(folder_name + file_names[i] + '_driving_log.csv') as csvfile:
 		reader = csv.reader(csvfile)
 		for line in reader:
 			data_samples.append(line)
@@ -37,7 +33,7 @@ def data_augmentation(batch_samples, folder_name):
 
 	for batch_sample in batch_samples:
 		for i in range(1):
-			name = folder_name + batch_sample[i].split('/')[-1]
+			name = folder_name + '/IMG/' + batch_sample[i].split('/')[-1]
 			image = cv2.imread(name)
 			angle = float(batch_sample[3])
 			#correction = 0.4
@@ -124,12 +120,9 @@ def NVidia_model(model, dropout_rate):
 	#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 def train_model(model, samples, folder_name, epochs):
-	#train_samples, validation_samples = train_test_split(samples, test_size=0.2)
-	train_samples = samples
-	validation_folder_name = './middle_driving_lap1/IMG/'
-	validation_samples = middle_driving_lap1_samples
+	train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 	train_generator = generator(train_samples, sample_size, folder_name)
-	validation_generator = generator(validation_samples, sample_size, validation_folder_name)
+	validation_generator = generator(validation_samples, sample_size, folder_name)
 
 	model.fit_generator(train_generator, samples_per_epoch = len(train_samples*sample_multiplier), validation_data = validation_generator, nb_val_samples = len(validation_samples*sample_multiplier), nb_epoch=epochs)
 	return model
@@ -141,16 +134,7 @@ model = Sequential()
 model = model_preprocessing(model)
 model = NVidia_model(model, dropout_rate)
 
-
-for i in range(3):
-	print("For loop: ", i+1)
-	# Use Udacity's training samples
-	folder_name = './data_udacity/IMG/'
-	model = train_model(model, udacity_samples, folder_name, epochs = 1)
-
-	# Use my training samples
-	folder_name = './data3/IMG/'
-	model = train_model(model, my_samples, folder_name, epochs = 1)
+model = train_model(model, data_samples, folder_name, epochs = 2)
 
 
 model.save('model.h5')
