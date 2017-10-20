@@ -139,12 +139,19 @@ model = NVidia_model(model, dropout_rate)
 
 # Use Udacity's training samples
 folder_name = './data_udacity/IMG/'
-model = train_model(model, udacity_samples, folder_name, epochs = 2)
+model = train_model(model, udacity_samples, folder_name, epochs = 1)
 
 # Use my training samples
 folder_name = './data3/IMG/'
 model = train_model(model, my_samples, folder_name, epochs = 1)
 
 
+# Use Udacity's training samples
+folder_name = './data_udacity/IMG/'
+model = train_model(model, udacity_samples, folder_name, epochs = 1)
+
+# Use my training samples
+folder_name = './data3/IMG/'
+model = train_model(model, my_samples, folder_name, epochs = 1)
 
 model.save('model.h5')
