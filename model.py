@@ -90,15 +90,15 @@ model.add(Lambda(resize_img))
 
 dropout_rate = 0.5
 
-model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "relu"))
+model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "ReLU"))
 #model.add(Dropout(dropout_rate))
-model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "relu"))
+model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "ReLU"))
 #model.add(Dropout(dropout_rate))
-model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "relu"))
+model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "ReLU"))
 #model.add(Dropout(dropout_rate))
-model.add(Convolution2D(64,3,3, activation = "relu"))
+model.add(Convolution2D(64,3,3, activation = "ReLU"))
 #model.add(Dropout(dropout_rate))
-model.add(Convolution2D(64,3,3, activation = "relu"))
+model.add(Convolution2D(64,3,3, activation = "ReLU"))
 
 model.add(Dropout(dropout_rate))
 
