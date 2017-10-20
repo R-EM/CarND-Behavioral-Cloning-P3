@@ -130,20 +130,21 @@ def train_model(model, samples, folder_name, epochs):
 	return model
 
 dropout_rate = 0.5	
-#epochs = 1
+epochs = 1
 
 model = Sequential()
 model = model_preprocessing(model)
 model = NVidia_model(model, dropout_rate)
 
 
-# Use my training samples
-folder_name = './data3/IMG/'
-model = train_model(model, my_samples, folder_name, epochs = 2)
-
 # Use Udacity's training samples
 folder_name = './data_udacity/IMG/'
-model = train_model(model, udacity_samples, folder_name, epochs = 1)
+model = train_model(model, udacity_samples, folder_name, epochs = 2)
+
+# Use my training samples
+folder_name = './data3/IMG/'
+model = train_model(model, my_samples, folder_name, epochs = 1)
+
 
 
 model.save('model.h5')
