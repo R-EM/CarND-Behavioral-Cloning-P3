@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 #from random import shuffle
 
-samples = []
 my_samples = []
 udacity_samples = []
 
@@ -30,13 +29,13 @@ def resize_img(img):
 	return ktf.image.resize_images(img, (64,64))
 
 # Function for data augentation
-def data_augmentation(batch_samples):
+def data_augmentation(batch_samples, folder_name):
 	images = []
 	angles = []
 
 	for batch_sample in batch_samples:
 		for i in range(3):
-			name = './data3/IMG/' + batch_sample[i].split('/')[-1]
+			name = folder_name + batch_sample[i].split('/')[-1]
 			image = cv2.imread(name)
 			angle = float(batch_sample[3])
 			correction = 0.4
@@ -67,7 +66,7 @@ def data_augmentation(batch_samples):
 	return X_train, y_train
 
 # Function to generate data
-def generator(samples, sample_size):
+def generator(samples, sample_size, folder_name):
 	num_samples = len(samples)
 
 	while 1:
@@ -75,7 +74,7 @@ def generator(samples, sample_size):
 		for offset in range(0, num_samples, sample_size):
 			batch_samples = samples[offset:offset+sample_size]
 
-			X_train, y_train = data_augmentation(batch_samples)
+			X_train, y_train = data_augmentation(batch_samples, folder_name)
 
 			yield sklearn.utils.shuffle(X_train, y_train)
 
@@ -127,17 +126,19 @@ def NVidia_model(train_gen, train_samp, validation_gen, validation_samp, epochs)
 	
 model = Sequential()
 
-
 # Udacity training samples
+folder_name = './data_udacity/IMG/'
 train_samples, validation_samples = train_test_split(udacity_samples, test_size=0.2)
-train_generator = generator(train_samples, sample_size)
-validation_generator = generator(validation_samples, sample_size)
+train_generator = generator(train_samples, sample_size, folder_name)
+validation_generator = generator(validation_samples, sample_size, folder_name)
 NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
 
+
 # My training samples
+folder_name = './data3/IMG/'
 train_samples, validation_samples = train_test_split(my_samples, test_size=0.2)
 train_generator = generator(train_samples, sample_size)
-validation_generator = generator(validation_samples, sample_size)
+validation_generator = generator(validation_samples, sample_size, folder_name)
 NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
 
 
