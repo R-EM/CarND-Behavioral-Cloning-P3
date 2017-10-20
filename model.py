@@ -12,20 +12,15 @@ my_samples = []
 udacity_samples = []
 middle_driving_lap1_samples = []
 
-with open('./data3/driving_log.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		my_samples.append(line)
+folder_names = ['data3', 'data_udacity', 'middle_driving_lap1']
+data_samples = []
 
-with open('./data_udacity/driving_log.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		udacity_samples.append(line)
 
-with open('./middle_driving_lap1/driving_log.csv') as csvfile:
-	reader = csv.reader(csvfile)
-	for line in reader:
-		middle_driving_lap1_samples.append(line)
+for i in range(len(folder_names)):
+	with open('./', folder_names[i], '/driving_log.csv') as csvfile:
+		reader = csv.reader(csvfile)
+		for line in reader:
+			data_samples.append(line)
 
 sample_size = 32
 sample_multiplier = 2
