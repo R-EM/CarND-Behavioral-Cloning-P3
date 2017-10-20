@@ -85,7 +85,7 @@ from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 
 
-def NVidia_model(train_gen, train_samp, validation_gen, validation_samp, epochs):
+def NVidia_model(model, train_gen, train_samp, validation_gen, validation_samp, epochs):
 	
 
 	# Pre-processing of data
@@ -121,6 +121,7 @@ def NVidia_model(train_gen, train_samp, validation_gen, validation_samp, epochs)
 
 	model.compile(loss = 'mse', optimizer = 'adam')
 	model.fit_generator(train_gen, samples_per_epoch = len(train_samp*6), validation_data = validation_gen, nb_val_samples = len(validation_samp*6), nb_epoch=epochs)
+	return model
 	#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 	
@@ -131,14 +132,14 @@ folder_name = './data_udacity/IMG/'
 train_samples, validation_samples = train_test_split(udacity_samples, test_size=0.2)
 train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
-NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
+model = NVidia_model(model, train_generator, train_samples, validation_generator, validation_samples, 1)
 
 # My training samples
 folder_name = './data3/IMG/'
 train_samples, validation_samples = train_test_split(my_samples, test_size=0.2)
 train_generator = generator(train_samples, sample_size, folder_name)
 validation_generator = generator(validation_samples, sample_size, folder_name)
-NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
+model =  NVidia_model(model, train_generator, train_samples, validation_generator, validation_samples, 1)
 
 
 
