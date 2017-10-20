@@ -131,7 +131,7 @@ def NVidia_model(model, dropout_rate):
 def train_model(model, samples, folder_name, epochs):
 	#train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 	train_samples = samples
-	validation_folder_name = './middle_driving_lap1'
+	validation_folder_name = './middle_driving_lap1/IMG/'
 	validation_samples = middle_driving_lap1_samples
 	train_generator = generator(train_samples, sample_size, folder_name)
 	validation_generator = generator(validation_samples, sample_size, validation_folder_name)
