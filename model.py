@@ -123,7 +123,7 @@ def NVidia_model(model, dropout_rate):
 
 
 dropout_rate = 0.5	
-epochs = 2
+epochs = 1
 
 model = Sequential()
 model = model_preprocessing(model)
