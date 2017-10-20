@@ -9,21 +9,27 @@ from sklearn.utils import shuffle
 #from random import shuffle
 
 samples = []
+my_samples = []
+udacity_samples = []
+
 with open('./data3/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
-		samples.append(line)
+		my_samples.append(line)
 
-
-train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+with open('./data_udacity/driving_log.csv') as csvfile:
+	reader = csv.reader(csvfile)
+	for line in reader:
+		udacity_samples.append(line)
 
 sample_size = 32
-#batch_size = 192
 
+# Function to resize image
 def resize_img(img):
 	from keras.backend import tf as ktf
 	return ktf.image.resize_images(img, (64,64))
 
+# Function for data augentation
 def data_augmentation(batch_samples):
 	images = []
 	angles = []
@@ -60,6 +66,7 @@ def data_augmentation(batch_samples):
 
 	return X_train, y_train
 
+# Function to generate data
 def generator(samples, sample_size):
 	num_samples = len(samples)
 
@@ -72,50 +79,66 @@ def generator(samples, sample_size):
 
 			yield sklearn.utils.shuffle(X_train, y_train)
 
-train_generator = generator(train_samples, sample_size)
-validation_generator = generator(validation_samples, sample_size)
-
 
 from keras.models import Sequential, Model
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout, Activation
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 
+
+def NVidia_model(train_gen, train_samp, validation_gen, validation_samp, epochs):
+	
+
+	# Pre-processing of data
+	model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160,320,3)))
+	model.add(Cropping2D(cropping=((70,25), (0,0))))
+	model.add(Lambda(resize_img))
+
+	dropout_rate = 0.5
+
+	model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "elu"))
+	#model.add(Dropout(dropout_rate))
+	model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "elu"))
+	#model.add(Dropout(dropout_rate))
+	model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "elu"))
+	#model.add(Dropout(dropout_rate))
+	model.add(Convolution2D(64,3,3, activation = "elu"))
+	#model.add(Dropout(dropout_rate))
+	model.add(Convolution2D(64,3,3, activation = "elu"))
+
+	model.add(Dropout(dropout_rate))
+
+
+	model.add(Flatten())
+	#model.add(Dropout(dropout_rate))
+	model.add(Dense(100))
+	#model.add(Dropout(dropout_rate))
+	model.add(Dense(50))
+	#model.add(Dropout(dropout_rate))
+	model.add(Dense(10))
+	#model.add(Dropout(dropout_rate))
+	model.add(Dense(1))
+	#model.add(Dropout(dropout_rate))
+
+	model.compile(loss = 'mse', optimizer = 'adam')
+	model.fit_generator(train_gen, samples_per_epoch = len(train_samp*6), validation_data = validation_gen, nb_val_samples = len(validation_samp*6), nb_epoch=epochs)
+	#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
+
+	
 model = Sequential()
 
-# Pre-processing of data
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160,320,3)))
-model.add(Cropping2D(cropping=((70,25), (0,0))))
-model.add(Lambda(resize_img))
 
-dropout_rate = 0.5
+# Udacity training samples
+train_samples, validation_samples = train_test_split(udacity_samples, test_size=0.2)
+train_generator = generator(train_samples, sample_size)
+validation_generator = generator(validation_samples, sample_size)
+NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
 
-model.add(Convolution2D(24,5,5, subsample=(2,2), activation = "elu"))
-#model.add(Dropout(dropout_rate))
-model.add(Convolution2D(36,5,5, subsample=(2,2), activation = "elu"))
-#model.add(Dropout(dropout_rate))
-model.add(Convolution2D(48,5,5, subsample=(2,2), activation = "elu"))
-#model.add(Dropout(dropout_rate))
-model.add(Convolution2D(64,3,3, activation = "elu"))
-#model.add(Dropout(dropout_rate))
-model.add(Convolution2D(64,3,3, activation = "elu"))
+# My training samples
+train_samples, validation_samples = train_test_split(my_samples, test_size=0.2)
+train_generator = generator(train_samples, sample_size)
+validation_generator = generator(validation_samples, sample_size)
+NVidia_model(train_generator, train_samples, validation_generator, validation_samples, 2)
 
-model.add(Dropout(dropout_rate))
-
-
-model.add(Flatten())
-#model.add(Dropout(dropout_rate))
-model.add(Dense(100))
-#model.add(Dropout(dropout_rate))
-model.add(Dense(50))
-#model.add(Dropout(dropout_rate))
-model.add(Dense(10))
-#model.add(Dropout(dropout_rate))
-model.add(Dense(1))
-#model.add(Dropout(dropout_rate))
-
-model.compile(loss = 'mse', optimizer = 'adam')
-model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=4)
-#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 model.save('model.h5')
