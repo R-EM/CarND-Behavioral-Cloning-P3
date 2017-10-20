@@ -10,6 +10,7 @@ from sklearn.utils import shuffle
 
 my_samples = []
 udacity_samples = []
+middle_driving_lap1_samples = []
 
 with open('./data3/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
@@ -21,7 +22,13 @@ with open('./data_udacity/driving_log.csv') as csvfile:
 	for line in reader:
 		udacity_samples.append(line)
 
+with open('./middle_driving_lap1/driving_log.csv') as csvfile:
+	reader = csv.reader(csvfile)
+	for line in reader:
+		middle_driving_lap1_samples.append(line)
+
 sample_size = 32
+sample_multiplier = 2
 
 # Function to resize image
 def resize_img(img):
@@ -122,11 +129,14 @@ def NVidia_model(model, dropout_rate):
 	#model.fit(X_train, y_train, validation_split = 0.2, shuffle = True, nb_epoch = 2)
 
 def train_model(model, samples, folder_name, epochs):
-	train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+	#train_samples, validation_samples = train_test_split(samples, test_size=0.2)
+	train_samples = samples
+	validation_folder_name = './middle_driving_lap1'
+	validation_samples = middle_driving_lap1_samples
 	train_generator = generator(train_samples, sample_size, folder_name)
-	validation_generator = generator(validation_samples, sample_size, folder_name)
+	validation_generator = generator(validation_samples, sample_size, validation_folder_name)
 
-	model.fit_generator(train_generator, samples_per_epoch = len(train_samples*6), validation_data = validation_generator, nb_val_samples = len(validation_samples*6), nb_epoch=epochs)
+	model.fit_generator(train_generator, samples_per_epoch = len(train_samples*sample_multiplier), validation_data = validation_generator, nb_val_samples = len(validation_samples*sample_multiplier), nb_epoch=epochs)
 	return model
 
 dropout_rate = 0.5	
