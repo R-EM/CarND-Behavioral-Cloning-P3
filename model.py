@@ -9,7 +9,7 @@ from sklearn.utils import shuffle
 #from random import shuffle
 
 folder_name = './data_driving/'
-file_names = ['middle_driving_lap1', 'middle_driving_lap2', 'middle_driving_lap3']
+file_names = ['middle_driving_lap1', 'middle_driving_lap2', 'middle_driving_lap3', 'middle_driving_reverse_lap1', 'middle_driving_reverse_lap2']
 data_samples = []
 
 for i in range(len(file_names)):
