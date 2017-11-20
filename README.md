@@ -73,6 +73,13 @@ Right camera:
 ![alt text][right] ![alt text][right_flip]
 
 
+Traditionally, the training and validation loss are also used to reduce overfitting. This is done by checking how the training and validation loss change after each epoch. The model is considered to be overfitted if the validation loss ceases to change between each epoch, or even increases, while the training loss decreases. Below, you will find a plot of how the training and validation loss change over epochs.
+
+![alt text][loss_graph] 
+
+The graph displays the change in loss over the course of 20 EPOCHS. In our case for the driving car, this method proved to undependable, since the training and validation loss were a poor measure of the vehicle's performance to begin with. The resluting video of the self-driving car was only produced using two epochs, since more epochs did not display any signs of large increase in performance.
+
+
 #### Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually.
