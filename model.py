@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import sklearn
 
+import matplotlib.pyplot as plt
+
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 #from random import shuffle
@@ -134,7 +136,10 @@ model = Sequential()
 model = model_preprocessing(model)
 model = NVidia_model(model, dropout_rate)
 
-model = train_model(model, data_samples, folder_name, epochs = 2)
+model = train_model(model, data_samples, folder_name, epochs = 20)
 
 
 model.save('model.h5')
+print(model.history.keys())
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
