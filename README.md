@@ -16,13 +16,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[left]: ./imgs/left.jpg "Left camera"
+[left_flip]: ./imgs/left_flip.jpg "Left camera flip"
+[center]: ./imgs/center.jpg "Center camera"
+[center_flip]: ./imgs/center_flip.jpg "Center camera flip"
+[right]: ./imgs/right.jpg "Right camera"
+[right_flip]: ./imgs/right_flip.jpg "Right camera flip"
+[loss_graph]: ./imgs/loss_graph.png "Loss graph"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -61,6 +61,11 @@ While training the network, the data is first shuffled before being fed into tra
 
 Some data augmentation has also been done in the form of flipping the images horizontally, and using the cameras. Horizontally flipping the images allows the vehicle to not overfit the curves, and using the side cameras helps with recovery driving if the car gets close to the sides.
 
+Below, three images can bee seen from the left, center and right cameras.
+![alt text][left] ![alt text][center] ![alt text][right] 
+
+Below, the flipped images of the ones above can be seen respecively.
+![alt text][left_flip] ![alt text][center_flip] ![alt text][right_flip] 
 #### Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually.

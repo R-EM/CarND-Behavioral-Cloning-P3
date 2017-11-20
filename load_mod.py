@@ -4,24 +4,12 @@ import cv2
 import numpy as np
 import sklearn
 
-import matplotlib.pyplot as plt
-
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
-#from random import shuffle
-
-folder_name = './data_driving/'
-file_names = ['middle_driving_lap1', 'middle_driving_lap2', 'middle_driving_lap3', 'middle_driving_reverse_lap1', 'middle_driving_reverse_lap2']
-data_samples = []
-
-for i in range(len(file_names)):
-	with open(folder_name + file_names[i] + '_driving_log.csv') as csvfile:
-		reader = csv.reader(csvfile)
-		for line in reader:
-			data_samples.append(line)
-
-sample_size = 32
-sample_multiplier = 6
+from keras.models import Sequential, Model, load_model
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout, Activation
+from keras.layers.convolutional import Convolution2D
+from keras.layers.pooling import MaxPooling2D
 
 # Function to resize image
 def resize_img(img):
@@ -79,11 +67,6 @@ def generator(samples, sample_size, folder_name):
 			yield sklearn.utils.shuffle(X_train, y_train)
 
 
-from keras.models import Sequential, Model
-from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout, Activation
-from keras.layers.convolutional import Convolution2D
-from keras.layers.pooling import MaxPooling2D
-
 # Pre-processing of data
 def model_preprocessing(model):
 	model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160,320,3)))
@@ -136,7 +119,14 @@ model = Sequential()
 model = model_preprocessing(model)
 model = NVidia_model(model, dropout_rate)
 
-model = train_model(model, data_samples, folder_name, epochs = 20)
+#model = train_model(model, data_samples, folder_name, epochs = 2)
+model.summary()
 
+from keras.callbacks import History 
+history = History()
 
-model.save('model.h5')
+print(history.history.keys())  
+
+#print(model)
+
+#model = load_model('model.h5')
