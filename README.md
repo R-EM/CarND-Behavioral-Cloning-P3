@@ -61,12 +61,16 @@ While training the network, the data is first shuffled before being fed into tra
 
 Some data augmentation has also been done in the form of flipping the images horizontally, and using the cameras. Horizontally flipping the images allows the vehicle to not overfit the curves, and using the side cameras helps with recovery driving if the car gets close to the sides.
 
-Below, three images can bee seen from the left, center and right cameras.
-| [![alt text][left]] | [![alt text][center]] | [![alt text][right]] |
-|:---:|:---:|:---:|
+Below, three sets of images can be side by side, displaying how each camera's image was flipped.
 
-Below, the flipped images of the ones above can be seen respecively.
-![alt text][left_flip] ![alt text][center_flip] ![alt text][right_flip]
+Left camera:
+![alt text][left]  ![alt text][left_flip] 
+
+Center camera:
+![alt text][center] ![alt text][center_flip] 
+
+Right camera: 
+![alt text][right] ![alt text][right_flip]
 
 
 #### Model parameter tuning
