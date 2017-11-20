@@ -23,6 +23,7 @@ The goals / steps of this project are the following:
 [right]: ./imgs/right.jpg "Right camera"
 [right_flip]: ./imgs/right_flip.jpg "Right camera flip"
 [loss_graph]: ./imgs/loss_graph.png "Loss graph"
+[angle_hist]: ./imgs/angle_histogram.png "Angle histogram"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -87,6 +88,14 @@ The model used an adam optimizer, so the learning rate was not tuned manually.
 #### Appropriate training data
 
 Training data was chosen to keep the vehicle driving on the road. A significant amount of data was tested and discarded, but what I found gave me the best results was using three laps of center lane driving, and two laps of center lane driving in reverse. This combined with the data augmentation proved sufficient. However, the vehicle does not drive as smoothely as a human would, so something that could be of benefit here would be to add a lap of smooth driving, and adding some driving data around specific areas that may not completely satisfy the vehicle's performance.
+
+
+A histogram comparison between the provided data from udacity and my data can be seen below.
+
+![alt text][angle_hist]
+
+Here it can clearly be seen that Udacity's data contains a somewhat larger bias towards zero angle, and a less even distribution towards the other angles. By using the mouse while steering during recordings from the simulations, a good distribution can be obtained, since the mouse usually leads to a small angle, making the model less biased towrads having an angle of zero.
+
 
 ###Model Architecture and Training Strategy
 

@@ -122,11 +122,4 @@ model = NVidia_model(model, dropout_rate)
 #model = train_model(model, data_samples, folder_name, epochs = 2)
 model.summary()
 
-from keras.callbacks import History 
-history = History()
-
-print(history.history.keys())  
-
-#print(model)
-
-#model = load_model('model.h5')
+np.histogram(y_train)
