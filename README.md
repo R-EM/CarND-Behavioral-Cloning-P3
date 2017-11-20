@@ -74,7 +74,7 @@ Right camera:
 ![alt text][right] ![alt text][right_flip]
 
 
-Traditionally, the training and validation loss are also used to reduce overfitting. This is done by checking how the training and validation loss change after each epoch. The model is considered to be overfitted if the validation loss ceases to change between each epoch, or even increases, while the training loss decreases. Below, you will find a plot of how the training and validation loss change over epochs.
+Traditionally, the training and validation loss are also used to reduce overfitting. This is done by checking how the training and validation loss change after each epoch. The model is considered to be overfitted if the validation loss ceases to change between each epoch, or even increases, while the training loss decreases. Below, you will find a plot of how the training and validation loss change over epochs, using a train/validation split of 80/20 over a total of around 41000 images.
 
 ![alt text][loss_graph] 
 
